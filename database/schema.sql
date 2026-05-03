@@ -50,6 +50,11 @@ CREATE TABLE IF NOT EXISTS coupons (
     expires_at DATETIME NOT NULL
 );
 
--- might implement coupon_usage 
-
+-- this tracks which users have used ehich coupons 
+CREATE TABLE IF NOT EXISTS coupon_usage (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    coupon_id INTEGER REFERENCES coupons(id), 
+    user_id INTEGER REFERENCES users(id),
+    used_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);  
 
