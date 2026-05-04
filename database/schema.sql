@@ -25,7 +25,8 @@ CREATE TABLE IF NOT EXISTS products (
     description TEXT,
     price REAL NOT NULL,
     stock_quantity INTEGER DEFAULT 0,
-    image_url TEXT
+    image_url TEXT,
+    brand TEXT
 );
 
 -- stores items a user has to thier cart
