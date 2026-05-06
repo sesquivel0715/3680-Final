@@ -11,9 +11,9 @@ Setup:
 - Use sqlite3 ecommerce.db < data.sql to populate tables
 
 Getting started:
--cd frontend 
--npm install
--npm run dev
+- cd frontend 
+- npm install
+- npm run dev
 
 Visit localhost
 
