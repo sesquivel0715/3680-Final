@@ -5,15 +5,27 @@ Team:
 - Backend: Ricardo Garcia Diaz  
 - Database: Stephanie Esquivel
 
-Setup:
-- SQLite needs to be installed
-- Use sqlite3 ecommerce.db < schema.sql to create tables
-- Use sqlite3 ecommerce.db < data.sql to populate tables
+Tech Stack:
+- Frontend:
+- Backend: Node.js, Express.js
+- Database: SQLite
 
-Getting started:
-- cd frontend 
-- npm install
-- npm run dev
+Setup:
+
+- Database: 
+    - cd database
+    - sqlite3 ecommerce.db < schema.sql
+    - sqlite3 ecommerce.db < data.sql
+
+- Backend:
+    - cd backend
+    - npm install
+    - node server.js
+
+- Frontend:
+    - cd frontend 
+    - npm install
+    - npm run dev
 
 Visit localhost
 
