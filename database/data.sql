@@ -12,7 +12,7 @@ INSERT INTO products (category_id, brand, name, description, price, stock_quanti
 INSERT INTO products (category_id, brand, name, description, price, stock_quantity, image_url) VALUES
 (1, 'Chanel', 'Bleu de Chanel', 'Fresh woody fragrance for men', 120.00, 30, '/images/bleu_chan.jpg');
 INSERT INTO products (category_id, brand, name, description, price, stock_quantity, image_url) VALUES
-(1, 'Giorgio Armani', 'Acqua di Gio', 'Light aquatic fragrance', 85.00, 20, '/images/acqua_gio.jpg');
+(1, 'Giorgio Armani', 'Acqua di Gio', 'Light aquatic fragrance', 85.00, 20, '/images/aqua_gio.jpg');
 INSERT INTO products (category_id, brand, name, description, price, stock_quantity, image_url) VALUES
 (2, 'Chanel', 'No. 5', 'Iconic floral fragrance for women', 150.00, 15, '/images/chanel_no5.jpg');
 INSERT INTO products (category_id, brand, name, description, price, stock_quantity, image_url) VALUES
