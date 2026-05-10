@@ -1025,12 +1025,12 @@ export default function CSUBeauty() {
   // Men's tab: anything with "men" or "grooming" in category name
   const womenProducts = products.filter(p => {
     const cat = (p.category_name || "").toLowerCase();
-    return !cat.includes("men") && !cat.includes("grooming");
+    return cat === "fragrance women" || cat.includes("makeup");
   });
 
   const menProducts = products.filter(p => {
     const cat = (p.category_name || "").toLowerCase();
-    return cat.includes("men") || cat.includes("grooming");
+    return cat === "fragrance men";
   });
 
   // Fall back to all products if no category split is possible
