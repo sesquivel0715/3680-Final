@@ -1,21 +1,16 @@
-// ============================================================
+
 // CSUBeauty.jsx — Main Frontend Component
 // This is the entire frontend of the CSUBeauty e-commerce app.
 // It handles: Auth (login/register), Products, Cart, Coupons,
 // and a Checkout confirmation screen.
 // It talks to the backend running on http://localhost:3000
-// ============================================================
+
 
 import { useState, useEffect, useRef } from "react";
 
-// Base URL for all API calls — points to the Express backend
+
 const API = "http://localhost:3000";
 
-// ============================================================
-// STYLES — all CSS is written here as a string and injected
-// into the page's <head> when the component loads.
-// This keeps everything in one file without needing a .css file.
-// ============================================================
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap');
 
@@ -45,7 +40,7 @@ const styles = `
     overflow-x: hidden;
   }
 
-  /* ── Navbar ── */
+  
   .csu-nav {
     background: rgba(13,11,20,0.97);
     backdrop-filter: blur(20px);
@@ -152,7 +147,7 @@ const styles = `
 
   .csu-cart-btn:hover { transform: scale(1.05); box-shadow: 0 0 20px rgba(236,72,153,0.4); }
 
-  /* Badge showing number of items in cart */
+  
   .csu-cart-count {
     position: absolute;
     top: -6px; right: -6px;
@@ -165,7 +160,7 @@ const styles = `
     display: flex; align-items: center; justify-content: center;
   }
 
-  /* ── Auth Modal (Login / Register popup) ── */
+  
   .csu-modal-overlay {
     position: fixed;
     inset: 0;
@@ -261,7 +256,7 @@ const styles = `
     padding: 0;
   }
 
-  /* Error box shown inside auth modal */
+  
   .csu-error {
     background: rgba(239,68,68,0.1);
     border: 1px solid rgba(239,68,68,0.3);
@@ -272,7 +267,7 @@ const styles = `
     margin-bottom: 14px;
   }
 
-  /* ── Collection Tabs (Women / Men) ── */
+  
   .csu-tabs {
     display: flex;
     margin: 28px 32px 0;
@@ -297,7 +292,7 @@ const styles = `
   .csu-tab:not(.active) { background: var(--bg2); color: var(--text-muted); }
   .csu-tab:not(.active):hover { background: var(--purple-dark); color: var(--text); }
 
-  /* ── Product Grid ── */
+  
   .csu-content { padding: 32px; }
   .csu-section { margin-bottom: 48px; }
 
@@ -320,7 +315,7 @@ const styles = `
 
   @media (max-width: 900px) { .csu-grid { grid-template-columns: repeat(2, 1fr); } }
 
-  /* ── Product Card ── */
+  
   .csu-card {
     background: var(--card);
     border-radius: 16px;
@@ -337,7 +332,7 @@ const styles = `
 
   .csu-card-img { width: 100%; height: 200px; object-fit: cover; display: block; }
 
-  /* Shown when product has no image_url in the database */
+  
   .csu-card-img-placeholder {
     width: 100%; height: 200px;
     background: linear-gradient(135deg, var(--purple-dark), #1a0a2e);
@@ -347,7 +342,7 @@ const styles = `
 
   .csu-card-body { padding: 16px; }
 
-  /* Category badge (e.g. MAKEUP, FRAGRANCE) */
+  
   .csu-tag {
     display: inline-block;
     background: var(--tag-bg);
@@ -369,7 +364,7 @@ const styles = `
   .csu-price { font-size: 18px; font-weight: 600; color: var(--purple-light); }
   .csu-stock { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
 
-  /* Add to Cart button on each product card */
+  
   .csu-add-btn {
     background: var(--grad);
     border: none;
@@ -387,7 +382,7 @@ const styles = `
   .csu-add-btn:active { transform: scale(0.97); }
   .csu-add-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
-  /* Loading spinner shown while fetching products */
+  
   .csu-loading {
     display: flex; align-items: center; justify-content: center;
     padding: 60px; color: var(--text-muted); font-size: 15px; gap: 12px;
@@ -404,7 +399,7 @@ const styles = `
   @keyframes spin { to { transform: rotate(360deg); } }
   .csu-empty { text-align: center; padding: 40px; color: var(--text-muted); font-size: 14px; }
 
-  /* ── Cart Slide-in Panel ── */
+  
   .csu-overlay {
     position: fixed; inset: 0;
     background: rgba(0,0,0,0.6);
@@ -455,7 +450,7 @@ const styles = `
   .csu-cart-body::-webkit-scrollbar-track { background: transparent; }
   .csu-cart-body::-webkit-scrollbar-thumb { background: var(--purple-mid); border-radius: 4px; }
 
-  /* Empty cart state */
+  
   .csu-cart-empty {
     height: 100%; display: flex; flex-direction: column;
     align-items: center; justify-content: center;
@@ -465,7 +460,7 @@ const styles = `
   .csu-cart-empty-icon { font-size: 48px; opacity: 0.4; }
   .csu-cart-empty h3 { font-size: 18px; color: var(--text); font-weight: 500; }
 
-  /* Each item row inside the cart */
+  
   .csu-cart-item {
     display: flex; gap: 14px; padding: 14px 0;
     border-bottom: 1px solid var(--border); align-items: center;
@@ -489,7 +484,7 @@ const styles = `
   .csu-item-price { font-size: 13px; color: var(--purple-light); font-weight: 600; }
   .csu-item-controls { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
 
-  /* +/- quantity buttons in the cart */
+  
   .csu-qty-btn {
     width: 26px; height: 26px; background: var(--purple-dark);
     border: 1px solid var(--border); border-radius: 6px; color: var(--text);
@@ -500,7 +495,7 @@ const styles = `
   .csu-qty-btn:hover { background: var(--purple-mid); }
   .csu-qty-num { font-size: 14px; font-weight: 600; min-width: 20px; text-align: center; }
 
-  /* ── Coupon Code Section ── */
+  
   .csu-coupon { display: flex; gap: 8px; margin-bottom: 12px; }
 
   .csu-coupon input {
@@ -524,7 +519,7 @@ const styles = `
   .csu-coupon-success { font-size: 12px; color: #86efac; margin-bottom: 10px; }
   .csu-coupon-error { font-size: 12px; color: #fca5a5; margin-bottom: 10px; }
 
-  /* ── Cart Footer (total + checkout) ── */
+  
   .csu-cart-footer { padding: 20px 28px; border-top: 1px solid var(--border); }
 
   .csu-cart-total {
@@ -552,8 +547,7 @@ const styles = `
 
   .csu-checkout-btn:hover { transform: scale(1.02); box-shadow: 0 8px 30px rgba(236,72,153,0.4); }
 
-  /* ── Checkout Confirmation Screen ── */
-  /* Shown inside the cart panel after clicking Checkout */
+  
   .csu-confirm {
     flex: 1;
     display: flex;
@@ -624,8 +618,6 @@ const styles = `
 
   .csu-continue-btn:hover { transform: scale(1.02); box-shadow: 0 8px 30px rgba(236,72,153,0.4); }
 
-  /* ── Toast Notification ── */
-  /* Small popup at the bottom when item is added to cart */
   .csu-toast {
     position: fixed; bottom: 28px; left: 50%;
     transform: translateX(-50%) translateY(80px);
@@ -639,10 +631,7 @@ const styles = `
   .csu-toast.show { transform: translateX(-50%) translateY(0); }
 `;
 
-// ============================================================
-// HELPER — returns an emoji based on the product category name
-// Used when a product has no image_url in the database
-// ============================================================
+// Fallback in case of no image
 const categoryEmoji = (name = "") => {
   const n = name.toLowerCase();
   if (n.includes("makeup") || n.includes("lipstick")) return "💄";
@@ -654,26 +643,16 @@ const categoryEmoji = (name = "") => {
   return "🛍️";
 };
 
-// ============================================================
-// COMPONENT — ProductCard
-// Renders a single product card in the grid.
-// Props:
-//   product   — product object from the DB (name, price, etc.)
-//   onAdd     — function to call when "+ Add" is clicked
-//   isAdding  — true while the add-to-cart API call is in flight
-// ============================================================
 function ProductCard({ product, onAdd, isAdding }) {
   const emoji = categoryEmoji(product.category_name || product.name);
 
   return (
     <div className="csu-card">
-      {/* Show real image if available, otherwise show emoji placeholder */}
       {product.image_url
         ? <img className="csu-card-img" src={product.image_url} alt={product.name} />
         : <div className="csu-card-img-placeholder">{emoji}</div>}
 
       <div className="csu-card-body">
-        {/* Category tag pulled from the categories table via JOIN */}
         <span className="csu-tag">{product.category_name || "PRODUCT"}</span>
         <div className="csu-card-name">{product.name}</div>
         {product.brand && <div className="csu-card-brand">{product.brand}</div>}
@@ -682,12 +661,10 @@ function ProductCard({ product, onAdd, isAdding }) {
         <div className="csu-card-footer">
           <div>
             <div className="csu-price">${Number(product.price).toFixed(2)}</div>
-            {/* Stock quantity from the products table */}
             <div className="csu-stock">
               {product.stock_quantity > 0 ? `${product.stock_quantity} in stock` : "Out of stock"}
             </div>
           </div>
-          {/* Disabled if out of stock or currently adding */}
           <button
             className="csu-add-btn"
             onClick={() => onAdd(product)}
@@ -701,14 +678,6 @@ function ProductCard({ product, onAdd, isAdding }) {
   );
 }
 
-// ============================================================
-// COMPONENT — CartItemRow
-// Renders a single item inside the shopping cart panel.
-// Props:
-//   item        — cart row (id, name, price, quantity, image_url)
-//   onIncrease  — called when "+" is clicked
-//   onDecrease  — called when "−" is clicked (removes if qty hits 0)
-// ============================================================
 function CartItemRow({ item, onIncrease, onDecrease }) {
   const emoji = categoryEmoji(item.name);
 
@@ -719,7 +688,6 @@ function CartItemRow({ item, onIncrease, onDecrease }) {
       </div>
       <div className="csu-item-info">
         <div className="csu-item-name">{item.name}</div>
-        {/* Price × quantity */}
         <div className="csu-item-price">${(item.price * item.quantity).toFixed(2)}</div>
       </div>
       <div className="csu-item-controls">
@@ -731,19 +699,9 @@ function CartItemRow({ item, onIncrease, onDecrease }) {
   );
 }
 
-// ============================================================
-// COMPONENT — CheckoutConfirm
-// Shown inside the cart panel after clicking "Checkout".
-// Displays a summary of the order and a "Continue Shopping" button.
-// Props:
-//   items      — the cart items array
-//   total      — final total after discount
-//   onClose    — closes the cart and resets to shopping view
-// ============================================================
 function CheckoutConfirm({ items, total, onClose }) {
   return (
     <div className="csu-confirm">
-      {/* Animated checkmark icon */}
       <div className="csu-confirm-icon">✅</div>
       <div className="csu-confirm-title">Order Placed!</div>
       <div className="csu-confirm-sub">
@@ -771,12 +729,6 @@ function CheckoutConfirm({ items, total, onClose }) {
   );
 }
 
-// ============================================================
-// COMPONENT — AuthModal
-// Shown on first load — user must log in or register.
-// Calls POST /auth/login or POST /auth/register on the backend.
-// On success, calls onAuth({ user_id, username }) to store the user.
-// ============================================================
 function AuthModal({ onAuth }) {
   const [mode, setMode] = useState("login"); // "login" or "register"
   const [username, setUsername] = useState("");
@@ -789,7 +741,6 @@ function AuthModal({ onAuth }) {
     if (!username || !password) { setError("Please fill in all fields."); return; }
     setLoading(true);
     try {
-      // Hit either /auth/login or /auth/register depending on mode
       const res = await fetch(`${API}/auth/${mode}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -798,7 +749,6 @@ function AuthModal({ onAuth }) {
       const data = await res.json();
       if (!res.ok) { setError(data.error || "Something went wrong."); return; }
 
-      // Pass user info up to the parent component
       onAuth({ user_id: data.user_id, username: data.username || username });
     } catch {
       setError("Could not connect to server. Make sure the backend is running on port 3000.");
@@ -817,7 +767,6 @@ function AuthModal({ onAuth }) {
           {mode === "login" ? "Sign in to your account" : "Create a new account"}
         </div>
 
-        {/* Error message from the backend or validation */}
         {error && <div className="csu-error">{error}</div>}
 
         <div className="csu-input-group">
@@ -857,11 +806,6 @@ function AuthModal({ onAuth }) {
   );
 }
 
-// ============================================================
-// MAIN COMPONENT — CSUBeauty
-// This is the root component that manages all state and
-// renders everything: navbar, tabs, products, cart panel.
-// ============================================================
 export default function CSUBeauty() {
 
   // ── State ──────────────────────────────────────────────────
@@ -881,7 +825,6 @@ export default function CSUBeauty() {
   const [toast, setToast] = useState({ visible: false, message: "" }); // bottom toast
   const toastTimer = useRef(null); // ref to clear the toast timeout
 
-  // ── Inject CSS into the page on mount ─────────────────────
   useEffect(() => {
     const el = document.createElement("style");
     el.textContent = styles;
@@ -889,22 +832,18 @@ export default function CSUBeauty() {
     return () => document.head.removeChild(el); // cleanup on unmount
   }, []);
 
-  // ── Fetch products when user logs in or search changes ─────
   useEffect(() => {
     if (user) fetchProducts();
   }, [searchQuery, user]);
 
-  // ── Fetch cart whenever the cart panel opens ───────────────
   useEffect(() => {
     if (user && cartOpen) fetchCart();
   }, [user, cartOpen]);
 
-  // ── API: GET /products — loads products from the database ──
   const fetchProducts = async () => {
     setLoadingProducts(true);
     try {
       const params = new URLSearchParams();
-      // If there's a search query, add it as ?search=...
       if (searchQuery.trim()) params.set("search", searchQuery.trim());
       const res = await fetch(`${API}/products?${params}`);
       const data = await res.json();
@@ -916,7 +855,6 @@ export default function CSUBeauty() {
     }
   };
 
-  // ── API: GET /cart/:user_id — loads the user's cart ────────
   const fetchCart = async () => {
     try {
       const res = await fetch(`${API}/cart/${user.user_id}`);
@@ -928,7 +866,6 @@ export default function CSUBeauty() {
     }
   };
 
-  // ── API: POST /cart — adds a product to the cart ───────────
   const addToCart = async (product) => {
     setAddingId(product.id);
     try {
@@ -948,8 +885,6 @@ export default function CSUBeauty() {
     }
   };
 
-  // ── API: PUT /cart/:id or DELETE /cart/:id ─────────────────
-  // Called when user clicks +/- on a cart item
   const updateQty = async (cartId, delta, currentQty) => {
     const newQty = currentQty + delta;
     if (newQty <= 0) {
@@ -966,7 +901,7 @@ export default function CSUBeauty() {
     fetchCart(); // refresh cart after change
   };
 
-  // ── API: POST /coupons/apply — validates and applies coupon ─
+  
   const applyCoupon = async () => {
     setCouponMsg(null);
     if (!couponCode.trim()) return;
@@ -985,13 +920,10 @@ export default function CSUBeauty() {
     }
   };
 
-  // ── Checkout handler ───────────────────────────────────────
-  // Shows the confirmation screen (no backend call needed for Option A)
   const handleCheckout = () => {
     setCheckedOut(true);
   };
 
-  // ── Called after user clicks "Continue Shopping" ───────────
   // Resets cart state and closes the panel
   const handleContinueShopping = () => {
     setCheckedOut(false);
@@ -1003,7 +935,6 @@ export default function CSUBeauty() {
     setCouponMsg(null);
   };
 
-  // ── Logout — clears all user state ────────────────────────
   const logout = () => {
     setUser(null);
     setCartItems([]);
@@ -1013,16 +944,12 @@ export default function CSUBeauty() {
     setCheckedOut(false);
   };
 
-  // ── Toast helper — shows a temporary bottom notification ───
   const showToast = (message) => {
     clearTimeout(toastTimer.current);
     setToast({ visible: true, message });
     toastTimer.current = setTimeout(() => setToast({ visible: false, message: "" }), 2200);
   };
 
-  // ── Filter products by tab ─────────────────────────────────
-  // Women's tab: everything that isn't men/grooming
-  // Men's tab: anything with "men" or "grooming" in category name
   const womenProducts = products.filter(p => {
     const cat = (p.category_name || "").toLowerCase();
     return cat === "fragrance women" || cat.includes("makeup");
@@ -1038,25 +965,20 @@ export default function CSUBeauty() {
     ? (womenProducts.length ? womenProducts : products)
     : menProducts;
 
-  // ── Derived values ─────────────────────────────────────────
   const cartCount = cartItems.reduce((s, i) => s + i.quantity, 0); // total item count for badge
   const finalTotal = Math.max(0, cartTotal - discount);             // total after coupon
 
-  // ── Render ─────────────────────────────────────────────────
   return (
     <div className="csu-root">
 
-      {/* Auth gate — blocks the page until user is logged in */}
       {!user && <AuthModal onAuth={setUser} />}
 
-      {/* ── Navbar ── */}
       <nav className="csu-nav">
         <div className="csu-logo">
           <div className="csu-logo-icon">✦</div>
           CSUBeauty
         </div>
 
-        {/* Search bar — calls fetchProducts via useEffect on change */}
         <div className="csu-search">
           <span className="csu-search-icon">🔍</span>
           <input
@@ -1074,7 +996,7 @@ export default function CSUBeauty() {
               <button className="csu-logout-btn" onClick={logout}>Logout</button>
             </>
           )}
-          {/* Cart button — shows item count badge */}
+
           <button className="csu-cart-btn" onClick={() => setCartOpen(true)}>
             🛒
             {cartCount > 0 && <span className="csu-cart-count">{cartCount}</span>}
@@ -1082,7 +1004,6 @@ export default function CSUBeauty() {
         </div>
       </nav>
 
-      {/* ── Collection Tabs ── */}
       <div className="csu-tabs">
         <button className={`csu-tab${activeTab === "women" ? " active" : ""}`} onClick={() => setActiveTab("women")}>
           Women's Collection
@@ -1092,7 +1013,6 @@ export default function CSUBeauty() {
         </button>
       </div>
 
-      {/* ── Products Grid ── */}
       <div className="csu-content">
         {loadingProducts ? (
           // Spinner while products are loading
@@ -1119,7 +1039,6 @@ export default function CSUBeauty() {
         )}
       </div>
 
-      {/* ── Cart Slide-in Panel ── */}
       <div
         className={`csu-overlay${cartOpen ? " open" : ""}`}
         // Click the dark backdrop to close the cart
@@ -1127,7 +1046,6 @@ export default function CSUBeauty() {
       >
         <div className="csu-cart-panel">
 
-          {/* Cart header */}
           <div className="csu-cart-header">
             <span className="csu-cart-title">
               {checkedOut ? "Order Confirmed" : "Shopping Cart"}
@@ -1138,7 +1056,6 @@ export default function CSUBeauty() {
             }}>✕</button>
           </div>
 
-          {/* Show confirmation screen or normal cart items */}
           {checkedOut ? (
             <CheckoutConfirm
               items={cartItems}
@@ -1149,7 +1066,6 @@ export default function CSUBeauty() {
             <>
               <div className="csu-cart-body">
                 {cartItems.length === 0 ? (
-                  // Empty cart state
                   <div className="csu-cart-empty">
                     <div className="csu-cart-empty-icon">🛒</div>
                     <h3>Your cart is empty</h3>
@@ -1168,10 +1084,8 @@ export default function CSUBeauty() {
                 )}
               </div>
 
-              {/* Footer only shown when cart has items */}
               {cartItems.length > 0 && (
                 <div className="csu-cart-footer">
-                  {/* Coupon code input — calls POST /coupons/apply */}
                   <div className="csu-coupon">
                     <input
                       type="text"
@@ -1183,20 +1097,17 @@ export default function CSUBeauty() {
                     <button className="csu-coupon-btn" onClick={applyCoupon}>Apply</button>
                   </div>
 
-                  {/* Success or error message after applying coupon */}
                   {couponMsg && (
                     <div className={couponMsg.type === "success" ? "csu-coupon-success" : "csu-coupon-error"}>
                       {couponMsg.text}
                     </div>
                   )}
 
-                  {/* Total price display */}
                   <div className="csu-cart-total">
                     <span>Total</span>
                     <span className="csu-total-amount">${finalTotal.toFixed(2)}</span>
                   </div>
 
-                  {/* Discount line shown only if coupon was applied */}
                   {discount > 0 && (
                     <div className="csu-cart-discount">
                       <span>Discount</span>
@@ -1204,7 +1115,6 @@ export default function CSUBeauty() {
                     </div>
                   )}
 
-                  {/* Checkout button — triggers confirmation screen */}
                   <button className="csu-checkout-btn" onClick={handleCheckout}>
                     Checkout →
                   </button>
@@ -1215,8 +1125,6 @@ export default function CSUBeauty() {
         </div>
       </div>
 
-      {/* ── Toast Notification ── */}
-      {/* Pops up briefly at the bottom when an item is added */}
       <div className={`csu-toast${toast.visible ? " show" : ""}`}>{toast.message}</div>
     </div>
   );
